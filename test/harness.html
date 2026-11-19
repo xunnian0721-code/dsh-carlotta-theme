@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>DSH 模拟页 · 珂莱塔主题测试</title>
+<style>
+/* 一个只用 DSH 令牌上色的简化界面，用来看令牌层是否覆盖到位 */
+:root{--dsw-alias-bg-base:#fff;--dsw-alias-bg-layer-1:#fff;--dsw-alias-bg-layer-2:#fff;--dsw-alias-label-primary:#111;--dsw-alias-label-secondary:#555;--dsw-alias-label-tertiary:#999;--dsw-alias-border-l2:#0001;--dsw-alias-border-l3:#0002;--dsw-alias-border-l4:#0003;--dsw-alias-state-business-primary:#4176e6;--dsw-alias-interactive-bg-hover:#0000000f;--dsw-specific-sidebar-fill:#f7f8fa;--dsw-specific-input-major:#fff;--dsw-alias-bg-overlay:#fff;--dsw-alias-button-primary-fill:#111}
+*{box-sizing:border-box}
+body{margin:0;height:100vh;font:13px "Noto Sans SC","Microsoft YaHei UI",sans-serif;color:var(--dsw-alias-label-primary);background:var(--dsw-alias-bg-base);display:flex}
+.side{width:248px;background:var(--dsw-specific-sidebar-fill);padding:10px 14px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:6px}
+[data-slot="sidebar.brand.mark"]{width:28px;height:28px;display:inline-grid;place-items:center}
+[data-slot="sidebar.brand.name"] span{font-weight:700;font-size:18px}
+.abc_newSession{height:36px;border-radius:10px;border:1px solid var(--dsw-alias-border-l3);background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);font:inherit;cursor:pointer;margin:6px 0}
+.nav{padding:8px 10px;border-radius:8px;color:var(--dsw-alias-label-secondary)}
+.nav:hover{background:var(--dsw-alias-interactive-bg-hover)}
+.main{flex:1;margin:8px;border-radius:16px;background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative}
+.main h1{margin:0;font-size:28px}
+[data-composer-card]{position:relative;width:640px;border-radius:24px;background:var(--dsw-specific-input-major);border:1px solid var(--dsw-alias-border-l2);padding:16px}
+.pv-bar{width:640px;height:40px;margin-bottom:-26px;border-radius:24px 24px 0 0;background:var(--pv-c-valley,#c3e6cf);padding:6px 16px;font-size:12px;text-align:right}
+.x_primary{float:right;width:34px;height:34px;border-radius:50%;border:0;background:var(--dsw-alias-button-primary-fill);color:#fff}
+.ph{color:var(--dsw-alias-label-tertiary);height:40px}
+.chips{display:flex;gap:10px;color:var(--dsw-alias-label-secondary)}
+.msg{width:640px;padding:10px 14px;border-radius:12px;background:var(--dsw-alias-bg-layer-2);border:1px solid var(--dsw-alias-border-l2)}
+.code{width:640px;border-radius:12px;background:var(--dsw-alias-markdown-code-block,#f5f5f5);padding:10px 14px;font:12px Consolas,monospace}
+#settings{position:fixed;inset:40px 120px;border-radius:18px;background:var(--dsw-alias-bg-overlay);border:1px solid var(--dsw-alias-border-l3);box-shadow:0 30px 80px -20px #0008;display:none;overflow:auto;padding:20px 28px;z-index:10}
+#settings.on{display:block}
+#bar{position:fixed;left:260px;top:12px;z-index:20;display:flex;gap:6px}
+#bar button{font:12px sans-serif;padding:4px 10px}
+</style></head>
+<body>
+<div class="side" data-slot="sidebar">
+  <div class="brand"><span data-slot="sidebar.brand.mark"><svg width="24" height="24"><circle cx="12" cy="12" r="10" fill="#4d6bfe"/></svg></span><span data-slot="sidebar.brand.name"><span>deepseek</span></span></div>
+  <button class="abc_newSession"><span>⊕ 新会话</span></button>
+  <div class="nav">工作台</div><div class="nav">插件</div>
+  <div class="nav" style="margin-top:12px;font-size:12px">工作区</div>
+  <div class="nav">DSH</div><div class="nav">bots</div>
+  <div style="margin-top:auto" class="nav" onclick="document.getElementById('settings').classList.toggle('on')">⚙ 设置</div>
+</div>
+<div class="main">
+  <h1>探索未至之境</h1>
+  <div class="msg">把底盘参数调一下，下压力提高 15%。</div>
+  <div class="code">export const chassis = { downforce: 1.15 };</div>
+  <div class="pv-bar">谷 · 剩余 14 小时 28 分</div>
+  <div data-composer-card><div class="ph">描述你想要构建的内容…</div><div class="chips"><span>+</span><span>完全权限</span><span style="margin-left:auto">DeepSeek-V41-Flash</span><button class="x_primary">↑</button></div></div>
+</div>
+<div id="settings"></div>
+<div id="bar"></div>
+
+<script src="/test/vendor/react.production.min.js"></script>
+<script src="/test/vendor/react-dom.production.min.js"></script>
+<script>
+// ---- 模拟 DSH 宿主环境 ----
+const listeners = new Map();
+const pref = { v: "light" };
+const layers = new Map();
+const themeSvc = {
+  getTheme() { const scheme = pref.v === "system" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : pref.v; return { preference: pref.v, active: { colorScheme: scheme } }; },
+  setTheme(id) { pref.v = id; publish(); },
+  overrideTokens(source, tokens) { const layer = { tokens }; layers.set(source, layer); publish(); return () => { if (layers.get(source) === layer) { layers.delete(source); publish(); } }; },
+};
+function publish() {
+  // 与 DSH 一样：把合成后的令牌写成 body 的 inline style
+  const scheme = themeSvc.getTheme().active.colorScheme;
+  document.body.removeAttribute("style");
+  for (const l of layers.values()) for (const [k, v] of Object.entries(l.tokens)) document.body.style.setProperty(k, v[scheme]);
+  for (const fn of listeners.get("theme/change") || []) fn();
+  window.__lastTokens = layers.size ? Object.keys([...layers.values()][0].tokens).length : 0;
+}
+const disposers = [];
+let section = null;
+const ctx = {
+  theme: themeSvc,
+  effect(fn) { const d = fn(); if (typeof d === "function") disposers.push(d); },
+  on(ev, fn) { if (!listeners.has(ev)) listeners.set(ev, new Set()); listeners.get(ev).add(fn); return () => listeners.get(ev).delete(fn); },
+  slots: {
+    inject(name, cb) { cb(); },
+    register(def, Comp) { section = { def, Comp }; ReactDOM.createRoot(document.getElementById("settings")).render(React.createElement(Comp)); return () => {}; },
+  },
+};
+window.__ModuleLoader__ = { load({ id, factory }) { const mod = factory((n) => { if (n === "react") return React; throw new Error(n); }); window.__mod = mod; mod.apply(ctx); window.__section = section; } };
+window.__dispose = () => { disposers.forEach((d) => d()); };
+// 工具条
+const bar = document.getElementById("bar");
+[["设置", () => document.getElementById("settings").classList.toggle("on")], ["DSH 设为暗色", () => themeSvc.setTheme("dark")], ["DSH 设为亮色", () => themeSvc.setTheme("light")], ["卸载插件", () => window.__dispose()]].forEach(([t, f]) => { const b = document.createElement("button"); b.textContent = t; b.onclick = f; bar.appendChild(b); });
+</script>
+<script src="/dsh-carlotta-theme/client.js"></script>
+</body></html>

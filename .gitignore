@@ -1,0 +1,10 @@
+# 画师插画与 Q 版图：版权原因不入库（见 assets/ART.md）
+assets/bg/
+assets/boot/
+assets/img/chibi.png
+assets/img/fullbody.webp
+
+# 测试运行时数据
+test/.data/
+node_modules/
+*.log

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-60 -60 120 120">
+  <defs>
+    <linearGradient id="pa" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff8fae"/><stop offset="1" stop-color="#c8204f"/>
+    </linearGradient>
+    <linearGradient id="pb" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2416e"/><stop offset="1" stop-color="#7d1233"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3dcaa"/><stop offset=".5" stop-color="#c9a464"/><stop offset="1" stop-color="#8f6a35"/>
+    </linearGradient>
+    <linearGradient id="ice" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#9fd2ee"/>
+    </linearGradient>
+    <g id="petal">
+      <path d="M0 0 L-9 -20 L0 -34 Z" fill="url(#pa)"/>
+      <path d="M0 0 L9 -20 L0 -34 Z" fill="url(#pb)"/>
+    </g>
+    <g id="petal2">
+      <path d="M0 0 L-7 -13 L0 -22 Z" fill="url(#pb)"/>
+      <path d="M0 0 L7 -13 L0 -22 Z" fill="url(#pa)"/>
+    </g>
+  </defs>
+  <!-- outer diamond frame -->
+  <path d="M0 -56 L56 0 L0 56 L-56 0 Z" fill="none" stroke="url(#gold)" stroke-width="1.6"/>
+  <path d="M0 -49 L49 0 L0 49 L-49 0 Z" fill="none" stroke="url(#gold)" stroke-width=".7" opacity=".7"/>
+  <!-- ice shards at the four points -->
+  <path d="M0 -60 L3 -52 L0 -46 L-3 -52 Z" fill="url(#ice)"/>
+  <path d="M0 60 L3 52 L0 46 L-3 52 Z" fill="url(#ice)"/>
+  <path d="M60 0 L52 3 L46 0 L52 -3 Z" fill="url(#ice)"/>
+  <path d="M-60 0 L-52 3 L-46 0 L-52 -3 Z" fill="url(#ice)"/>
+  <!-- faceted rose -->
+  <g>
+    <use href="#petal" transform="rotate(0)"/><use href="#petal" transform="rotate(45)"/>
+    <use href="#petal" transform="rotate(90)"/><use href="#petal" transform="rotate(135)"/>
+    <use href="#petal" transform="rotate(180)"/><use href="#petal" transform="rotate(225)"/>
+    <use href="#petal" transform="rotate(270)"/><use href="#petal" transform="rotate(315)"/>
+  </g>
+  <g transform="rotate(22.5)">
+    <use href="#petal2" transform="rotate(0)"/><use href="#petal2" transform="rotate(72)"/>
+    <use href="#petal2" transform="rotate(144)"/><use href="#petal2" transform="rotate(216)"/>
+    <use href="#petal2" transform="rotate(288)"/>
+  </g>
+  <path d="M0 -7 L6 0 L0 7 L-6 0 Z" fill="url(#ice)" stroke="#fff" stroke-width=".5"/>
+</svg>

@@ -1,0 +1,6 @@
+# dsh-carlotta-theme 的 profile bundle patch。
+# 浏览器半边由 package.json 的 dsh.client 自动发现（lib/client.js）。
+
+- insert:
+    - id: carlotta-theme
+      name: 'dsh-carlotta-theme'
