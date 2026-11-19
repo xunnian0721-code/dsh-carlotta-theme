@@ -13,6 +13,8 @@ process.env.APPDATA = dataDir;
 import { copyFileSync, existsSync as ex } from "node:fs";
 const realRes = process.env.DSH_RESOURCES || join(process.env.LOCALAPPDATA || "", "Programs", "DSH Desktop Purge 0.12.0", "resources");
 for (const f of ["splash.html", "dsh-loader.gif", "dsh-loader-dark.gif"]) if (ex(join(realRes, f))) copyFileSync(join(realRes, f), join(dataDir, f));
+// 真实 DSH 若已被替换过，用备份的原版
+if (ex(join(realRes, "splash.html.carlotta-orig"))) copyFileSync(join(realRes, "splash.html.carlotta-orig"), join(dataDir, "splash.html"));
 process.env.CARLOTTA_SPLASH_FILE = join(dataDir, "splash.html");
 const { apply, quotaRoute } = await import("../lib/index.js");
 const { createQuota } = await import("../lib/quota.js");
