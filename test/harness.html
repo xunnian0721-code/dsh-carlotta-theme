@@ -75,6 +75,8 @@ const ctx = {
     inject(name, cb) { cb(); },
     register(def, Comp) {
       if (def.name === "settings.section") { section = { def, Comp }; ReactDOM.createRoot(document.getElementById("settings")).render(React.createElement(Comp)); return () => {}; }
+      // 模拟 DSH：这几个单插槽官方已在优先级 0 注册，同优先级会报错
+      if ((def.priority ?? 0) === 0) throw new Error('single slot "' + def.name + '" already has a registration at priority 0');
       const host = document.querySelector('[data-mock-slot="' + def.name + '"]');
       if (!host) return () => {};
       const fallback = host.innerHTML;
