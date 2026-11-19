@@ -134,6 +134,40 @@ try {
 	assert.equal(parseAccountBalance({ status: "not_logged_in" }), null);
 	ok("没 Key 时用 DSH 登录账号查余额（充值 + 赠金）");
 
+	// DSH 自带启动页替换（用临时的假 splash.html）
+	const { createSplash, MARKER } = await import("../lib/splash.js");
+	const { writeFileSync: wf, mkdirSync: md } = await import("node:fs");
+	const res = join(tmp, "resources"); md(res, { recursive: true });
+	const sf = join(res, "splash.html");
+	const ORIGINAL = "<!doctype html><html><head></head><body><main>Starting DSH</main></body></html>";
+	wf(sf, ORIGINAL);
+	const sp = createSplash({ dataDir: join(tmp, "sd"), assetRoot: (await import("node:url")).fileURLToPath(new URL("../assets/", import.meta.url)), splashFile: sf });
+	assert.deepEqual(sp.state(), { supported: true, patched: false, path: sf });
+	let st = sp.apply({ enabled: true, skin: "night", css: "body{color:red} url(__DIR__/fonts/x.woff2)", html: "<div id=cl-boot><img src='__DIR__/boot.webp'></div>" });
+	assert.equal(st.patched, true, JSON.stringify(st));
+	const patched = readFileSync(sf, "utf8");
+	assert.ok(patched.includes(MARKER) && patched.includes("<main>Starting DSH</main>"));
+	assert.equal(readFileSync(sf + ".carlotta-orig", "utf8"), ORIGINAL);
+	const page = readFileSync(join(tmp, "sd", "splash", "page.js"), "utf8");
+	assert.ok(page.startsWith("window.__CL_SPLASH") && page.includes("file:///") && !page.includes("__DIR__"));
+	assert.ok(existsSync(join(tmp, "sd", "splash", "fonts", "Caveat-600.woff2")));
+	ok("替换启动页：备份原文件、写入画面、路径换成本机文件");
+	st = sp.apply({ enabled: true, skin: "summer", css: "x", html: "<div></div>" });
+	assert.equal(readFileSync(sf, "utf8"), patched);
+	ok("换皮肤只更新内容，不重复改 DSH 文件");
+	wf(sf, ORIGINAL + "<!-- dsh updated -->");          // 模拟 DSH 更新覆盖
+	sp.heal(true);
+	assert.ok(readFileSync(sf, "utf8").includes(MARKER));
+	ok("DSH 更新覆盖后自动重新替换");
+	st = sp.apply({ enabled: false });
+	assert.equal(readFileSync(sf, "utf8"), ORIGINAL + "<!-- dsh updated -->");
+	assert.ok(!existsSync(sf + ".carlotta-orig"));
+	assert.equal(st.patched, false);
+	ok("关闭后原样还原");
+	assert.equal(createSplash({ dataDir: tmp, assetRoot: tmp, splashFile: null }).apply({ enabled: true }).supported, false);
+	assert.equal(sp.apply({ enabled: true, skin: "../x", css: "", html: "" }).error, "内容格式不对");
+	ok("找不到文件 / 坏数据时不出错");
+
 	cleanups.forEach((d) => d());
 	console.log(`\n全部通过（${pass} 项）`);
 } finally {

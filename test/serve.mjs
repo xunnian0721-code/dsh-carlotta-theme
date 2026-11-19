@@ -9,6 +9,11 @@ const here = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(here, ".data");
 mkdirSync(dataDir, { recursive: true });
 process.env.APPDATA = dataDir;
+// 测试用：复制一份 DSH 真正的启动页来替换，不碰安装目录
+import { copyFileSync, existsSync as ex } from "node:fs";
+const realRes = process.env.DSH_RESOURCES || join(process.env.LOCALAPPDATA || "", "Programs", "DSH Desktop Purge 0.12.0", "resources");
+for (const f of ["splash.html", "dsh-loader.gif", "dsh-loader-dark.gif"]) if (ex(join(realRes, f))) copyFileSync(join(realRes, f), join(dataDir, f));
+process.env.CARLOTTA_SPLASH_FILE = join(dataDir, "splash.html");
 const { apply, quotaRoute } = await import("../lib/index.js");
 const { createQuota } = await import("../lib/quota.js");
 const table = new Map();
