@@ -1,8 +1,8 @@
 {
   "name": "dsh-carlotta-theme",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "private": true,
-  "description": "鸣潮·珂莱塔主题：晶棱玫瑰（夜宴/白昼）、璀璨、休憩日、盛夏五套皮肤，全窗口换色、动态背景、启动画面，设置集成在 DSH 设置里，点 Q 版看 DeepSeek 余额与今日已用。非官方同人作品。",
+  "description": "鸣潮·珂莱塔主题：晶棱玫瑰（夜宴/白昼）、璀璨、休憩日、盛夏五套皮肤，全窗口换色、动态背景、启动画面，设置集成在 DSH 设置里，点 Q 版看 DeepSeek 余额与今日已用。非官方、非商业同人作品，插画为本地生成的同人图。",
   "license": "MIT",
   "repository": { "type": "git", "url": "git+https://github.com/xunnian0721-code/dsh-carlotta-theme.git" },
   "type": "module",

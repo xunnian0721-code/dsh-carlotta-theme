@@ -95,4 +95,9 @@ const bar = document.getElementById("bar");
 [["设置", () => document.getElementById("settings").classList.toggle("on")], ["DSH 设为暗色", () => themeSvc.setTheme("dark")], ["DSH 设为亮色", () => themeSvc.setTheme("light")], ["卸载插件", () => window.__dispose()]].forEach(([t, f]) => { const b = document.createElement("button"); b.textContent = t; b.onclick = f; bar.appendChild(b); });
 </script>
 <script src="/dsh-carlotta-theme/client.js"></script>
+<script>
+// 截示意图用：?clean 隐藏测试按钮，?settings 打开设置窗口
+if (location.search.includes("clean")) document.getElementById("bar").style.display = "none";
+if (location.search.includes("settings")) document.getElementById("settings").classList.add("on");
+</script>
 </body></html>
