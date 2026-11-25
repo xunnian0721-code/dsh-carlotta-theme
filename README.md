@@ -19,6 +19,30 @@
 
 每套皮肤都有自己的配色、首页流光标题、徽章图标、背景动效（符文连线、日光尘埃、泡泡、海浪、落花……）和启动画面加载文字。
 
+## 效果截图
+
+> 珂莱塔五套截图里的插画，是主题作者**用本地模型生成的同人图**（不是图片清单里任何画师的作品），只用于展示效果，**不在仓库里**。
+> 爱弥斯、达妮娅、西格莉卡这几张是**不放插画**时的样子：配色、流光标题、徽章和背景动效照常显示。
+
+| 晶棱玫瑰 · 夜宴 | 晶棱玫瑰 · 白昼 |
+| --- | --- |
+| ![夜宴](docs/screenshots/main_night.webp) | ![白昼](docs/screenshots/main_day.webp) |
+
+| 璀璨 | 休憩日 | 盛夏 |
+| --- | --- | --- |
+| ![璀璨](docs/screenshots/main_prism.webp) | ![休憩日](docs/screenshots/main_daily.webp) | ![盛夏](docs/screenshots/main_summer.webp) |
+
+| 启动画面 · 夜宴 | 启动画面 · 盛夏 |
+| --- | --- |
+| ![夜宴启动画面](docs/screenshots/boot_night.webp) | ![盛夏启动画面](docs/screenshots/boot_summer.webp) |
+
+| 爱弥斯 · 星辉 · 歌姬（不放图） | 达妮娅 · 伪装 · 泡影（不放图） | 西格莉卡 · 符文 · 语义解现（不放图） |
+| --- | --- | --- |
+| ![爱弥斯](docs/screenshots/main_astage.webp) | ![达妮娅](docs/screenshots/main_dveil.webp) | ![西格莉卡](docs/screenshots/main_srune.webp) |
+
+设置页（集成在 DSH 设置左栏，按角色分组选皮肤）：
+
+![设置页](docs/screenshots/settings.webp)
 ## 功能
 - **全窗口换色**：DSH 所有窗口（主界面、工作台、设置、插件、轨迹、右侧栏、菜单、弹窗、提示）的颜色都来自约 100 个 `--dsw-alias-*` 变量，插件用官方 `ctx.theme.overrideTokens` 整套替换。
 - **背景图 + 动效**：每套皮肤一张背景，可在设置里换成自己的图片 / GIF / 视频；可调透明度、模糊、压暗。
@@ -69,6 +93,7 @@ DSH 桌面版每次启动端口会变，浏览器存储会丢，所以设置、�
 | `assets/bg/`、`assets/boot/`、`assets/img/` | **你自己放的插画**（不入库） |
 | `docs/图片清单.md` | 原作链接、作品 ID、画师 |
 | `docs/插图教程.md` | 取得授权、下载、放图、调整构图的详细步骤 |
+| `docs/screenshots/` | README 里的效果截图 |
 | `tools/prepare.py` | 把图片转成插件要的尺寸 / 格式 / 文件名（不联网） |
 | `tools/images.json` | 图片清单的机器可读版本 |
 | `test/` | 测试 |
