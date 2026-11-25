@@ -1,4 +1,11 @@
+# 画师插画不入库：版权归原作者，使用前须取得原作者同意（见 docs/图片清单.md、docs/插图教程.md）
+assets/bg/
+assets/boot/
+assets/img/*
+!assets/img/crest.svg
+
 # 测试运行时数据
 test/.data/
 node_modules/
 *.log
+__pycache__/

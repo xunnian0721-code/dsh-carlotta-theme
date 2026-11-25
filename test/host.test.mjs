@@ -37,14 +37,23 @@ const ok = (msg) => { pass++; console.log("  ✓ " + msg); };
 
 try {
 	// 素材
-	const need = ["bg/night.webp", "bg/summer.webp", "boot/day.webp", "img/chibi.png", "img/crest.svg", "fonts/Caveat-600.woff2"];
+	// 仓库不带画师插画（见 docs/图片清单.md），所以只要求代码自带的素材一定在
+	const need = ["img/crest.svg", "fonts/Caveat-600.woff2", "fonts/ZCOOLKuaiLe-sub.woff2"];
 	for (const p of need) assert.ok(table.has("/dsh-carlotta-theme/a/" + p), "missing route " + p);
 	ok(`注册了 ${table.size} 条路由，关键素材齐全`);
-	let r = await fetch(url("/dsh-carlotta-theme/a/bg/night.webp?v=1.0.0"));
-	assert.equal(r.status, 200);
-	assert.equal(r.headers.get("content-type"), "image/webp");
-	assert.ok((await r.arrayBuffer()).byteLength > 10000);
-	ok("背景图可读取，类型正确");
+	let r;
+	if (table.has("/dsh-carlotta-theme/a/bg/night.webp")) {
+		r = await fetch(url("/dsh-carlotta-theme/a/bg/night.webp?v=1.0.0"));
+		assert.equal(r.status, 200);
+		assert.equal(r.headers.get("content-type"), "image/webp");
+		assert.ok((await r.arrayBuffer()).byteLength > 10000);
+		ok("背景图可读取，类型正确");
+	} else {
+		r = await fetch(url("/dsh-carlotta-theme/a/img/crest.svg"));
+		assert.equal(r.status, 200);
+		assert.equal(r.headers.get("content-type"), "image/svg+xml");
+		ok("素材可读取，类型正确（没放插画，跳过背景图检查）");
+	}
 	r = await fetch(url("/dsh-carlotta-theme/a/fonts/Caveat-600.woff2"), { headers: { range: "bytes=0-99" } });
 	assert.equal(r.status, 206);
 	assert.equal((await r.arrayBuffer()).byteLength, 100);
@@ -74,7 +83,8 @@ try {
 	ok("外部来源的请求被拒绝");
 
 	// 自定义背景
-	const png = readFileSync(new URL("../assets/img/chibi.png", import.meta.url));
+	// 1×1 透明 PNG（不依赖仓库里有没有插画）
+	const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
 	r = await fetch(url("/dsh-carlotta-theme/userbg?skin=day"), { method: "POST", headers: { "content-type": "image/png" }, body: png });
 	assert.deepEqual(await r.json(), { ok: true, type: "image/png" });
 	r = await fetch(url("/dsh-carlotta-theme/userbg?skin=day"));
